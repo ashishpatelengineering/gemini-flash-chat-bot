@@ -47,7 +47,7 @@ def main():
     choice = get_choice()
     
     if choice == "Chat":
-        st.subheader("Ask Gemini")
+        st.subheader("Chat")
         clear = get_clear()
         if clear:
             if 'message' in st.session_state:
