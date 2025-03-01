@@ -195,7 +195,7 @@ def main():
             uploaded_file = st.file_uploader("Upload an image (PNG or JPEG)", type=['png','jpg'], accept_multiple_files=False)
             if uploaded_file:
                 # Display the uploaded image
-                st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+                st.image(uploaded_file, caption="Uploaded Image", use_container_width=True)
                 
                 # Save the uploaded file to a temporary location
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp_file:
