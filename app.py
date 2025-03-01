@@ -67,7 +67,7 @@ def main():
                 system_instruction="You are a helpful assistant. Your answers need to be friendly and positive.",))
             prompt = st.chat_input("Enter your question here")
             if prompt:
-                with st.chat_message("user"):
+                with st.chat_message("user", avatar="🟠"):
                     st.write(prompt)
         
                 st.session_state.message += prompt
