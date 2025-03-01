@@ -114,7 +114,7 @@ def main():
                 )
                 prompt2 = st.chat_input("Enter your question here")
                 if prompt2:
-                    with st.chat_message("user"):
+                    with st.chat_message("user", avatar="🟠"):
                         st.write(prompt2)
             
                     st.session_state.message += prompt2
@@ -168,7 +168,7 @@ def main():
                 )
                 prompt2b = st.chat_input("Enter your question here")
                 if prompt2b:
-                    with st.chat_message("user"):
+                    with st.chat_message("user", avatar="🟠"):
                         st.write(prompt2b)
             
                     st.session_state.message += prompt2b
@@ -218,7 +218,7 @@ def main():
                 )
                 prompt3 = st.chat_input("Enter your question here")
                 if prompt3:
-                    with st.chat_message("user"):
+                    with st.chat_message("user", avatar="🟠"):
                         st.write(prompt3)
             
                     st.session_state.message += prompt3
@@ -267,7 +267,7 @@ def main():
                 )
                 prompt5 = st.chat_input("Enter your question here")
                 if prompt5:
-                    with st.chat_message("user"):
+                    with st.chat_message("user", avatar="🟠"):
                         st.write(prompt5)
             
                     st.session_state.message += prompt5
@@ -323,7 +323,7 @@ def main():
                 )
                 prompt4 = st.chat_input("Enter your question here")
                 if prompt4:
-                    with st.chat_message("user"):
+                    with st.chat_message("user",avatar="🟠"):
                         st.write(prompt4)
             
                     st.session_state.message += prompt4
