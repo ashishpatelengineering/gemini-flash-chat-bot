@@ -16,7 +16,7 @@ def setup_page():
         layout="centered"
     )
     
-    st.header("Multimodal Chatbot" )
+    st.header("Multimodal Chatbot", anchor=False, divider="blue")
 
     st.sidebar.header("Options", divider='rainbow')
     
