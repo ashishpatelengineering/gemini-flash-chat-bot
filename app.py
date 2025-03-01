@@ -12,11 +12,11 @@ load_dotenv()
 
 def setup_page():
     st.set_page_config(
-        page_title="⚡ Voice Chatbot",
+        page_title="🤖 Multi-Modal Chatbot",
         layout="centered"
     )
     
-    st.header("Chatbot using Gemini 2.0 Flash!")
+    st.header("🤖 Multi-Modal Chatbot")
 
     st.sidebar.header("Options", divider='rainbow')
     
@@ -28,12 +28,12 @@ def setup_page():
     st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 def get_choice():
-    choice = st.sidebar.radio("Choose:", ["Converse with Gemini 2.0",
+    choice = st.sidebar.radio("Choose:", ["Chat with Text",
                                           "Chat with a PDF",
-                                          "Chat with many PDFs",
-                                          "Chat with an image",
-                                          "Chat with audio",
-                                          "Chat with video"])
+                                          "Chat with Multiple PDFs",
+                                          "Chat with an Image",
+                                          "Chat with Audio",
+                                          "Chat with Video"])
     return choice
 
 def get_clear():
@@ -43,8 +43,8 @@ def get_clear():
 def main():
     choice = get_choice()
     
-    if choice == "Converse with Gemini 2.0":
-        st.subheader("Ask Gemini")
+    if choice == "Chat with Text":
+        st.subheader("Chat with Text")
         clear = get_clear()
         if clear:
             if 'message' in st.session_state:
@@ -63,7 +63,7 @@ def main():
         
                 st.session_state.message += prompt
                 with st.chat_message(
-                    "model", avatar="🧞‍♀️",
+                    "assistant", avatar="🤖",
                 ):
                     response = chat.send_message(st.session_state.message)
                     st.markdown(response.text) 
@@ -71,7 +71,7 @@ def main():
                 st.session_state.message += response.text
 
     elif choice == "Chat with a PDF":
-        st.subheader("Chat with your PDF file")
+        st.subheader("Chat with a PDF")
         clear = get_clear()
         if clear:
             if 'message' in st.session_state:
@@ -81,7 +81,7 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
-            uploaded_file = st.file_uploader("Choose your pdf file", type=['pdf'], accept_multiple_files=False)
+            uploaded_file = st.file_uploader("Upload a PDF file", type=['pdf'], accept_multiple_files=False)
             if uploaded_file:
                 # Save the uploaded file to a temporary location
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
@@ -108,15 +108,15 @@ def main():
             
                     st.session_state.message += prompt2
                     with st.chat_message(
-                        "model", avatar="🧞‍♀️",
+                        "assistant", avatar="🤖",
                     ):
                         response2 = chat2.send_message(st.session_state.message)
                         st.markdown(response2.text)
                         st.sidebar.markdown(response2.usage_metadata)
                     st.session_state.message += response2.text
 
-    elif choice == "Chat with many PDFs":
-        st.subheader("Chat with your PDF file")
+    elif choice == "Chat with Multiple PDFs":
+        st.subheader("Chat with Multiple PDFs")
         clear = get_clear()
         if clear:
             if 'message' in st.session_state:
@@ -126,7 +126,7 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
-            uploaded_files = st.file_uploader("Choose 1 or more files", type=['pdf'], accept_multiple_files=True)
+            uploaded_files = st.file_uploader("Upload one or more PDF files", type=['pdf'], accept_multiple_files=True)
             if uploaded_files:
                 merger = PdfMerger()
                 for file in uploaded_files:
@@ -159,15 +159,15 @@ def main():
             
                     st.session_state.message += prompt2b
                     with st.chat_message(
-                        "model", avatar="🧞‍♀️",
+                        "assistant", avatar="🤖",
                     ):
                         response2b = chat2b.send_message(st.session_state.message)
                         st.markdown(response2b.text)
                         st.sidebar.markdown(response2b.usage_metadata)
                     st.session_state.message += response2b.text
             
-    elif choice == "Chat with an image":
-        st.subheader("Chat with your image file")
+    elif choice == "Chat with an Image":
+        st.subheader("Chat with an Image")
         clear = get_clear()
         if clear:
             if 'message' in st.session_state:
@@ -177,8 +177,11 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
-            uploaded_file = st.file_uploader("Choose your PNG or JPEG file", type=['png','jpg'], accept_multiple_files=False)
+            uploaded_file = st.file_uploader("Upload an image (PNG or JPEG)", type=['png','jpg'], accept_multiple_files=False)
             if uploaded_file:
+                # Display the uploaded image
+                st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+                
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp_file:
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
@@ -203,14 +206,14 @@ def main():
             
                     st.session_state.message += prompt3
                     with st.chat_message(
-                        "model", avatar="🧞‍♀️",
+                        "assistant", avatar="🤖",
                     ):
                         response3 = chat3.send_message(st.session_state.message)
                         st.markdown(response3.text)
                     st.session_state.message += response3.text
                 
-    elif choice == "Chat with audio":
-        st.subheader("Chat with your audio file")
+    elif choice == "Chat with Audio":
+        st.subheader("Chat with Audio")
         clear = get_clear()
         if clear:
             if 'message' in st.session_state:
@@ -220,8 +223,11 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
-            uploaded_file = st.file_uploader("Choose your mp3 or wav file", type=['mp3','wav'], accept_multiple_files=False)
+            uploaded_file = st.file_uploader("Upload an audio file (MP3 or WAV)", type=['mp3','wav'], accept_multiple_files=False)
             if uploaded_file:
+                # Display the uploaded audio file
+                st.audio(uploaded_file, format="audio/wav")
+                
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_file:
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
@@ -246,14 +252,14 @@ def main():
             
                     st.session_state.message += prompt5
                     with st.chat_message(
-                        "model", avatar="🧞‍♀️",
+                        "assistant", avatar="🤖",
                     ):
                         response4 = chat4.send_message(st.session_state.message)
                         st.markdown(response4.text)
                     st.session_state.message += response4.text
 
-    elif choice == "Chat with video":
-        st.subheader("Chat with your video file")
+    elif choice == "Chat with Video":
+        st.subheader("Chat with Video")
         clear = get_clear()
         if clear:
             if 'message' in st.session_state:
@@ -263,8 +269,11 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
-            uploaded_file = st.file_uploader("Choose your mp4 or mov file", type=['mp4','mov'], accept_multiple_files=False)
+            uploaded_file = st.file_uploader("Upload a video file (MP4 or MOV)", type=['mp4','mov'], accept_multiple_files=False)
             if uploaded_file:
+                # Display the uploaded video file
+                st.video(uploaded_file, format="video/mp4")
+                
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
@@ -296,7 +305,7 @@ def main():
             
                     st.session_state.message += prompt4
                     with st.chat_message(
-                        "model", avatar="🧞‍♀️",
+                        "assistant", avatar="🤖",
                     ):
                         response5 = chat5.send_message(st.session_state.message)
                         st.markdown(response5.text)
