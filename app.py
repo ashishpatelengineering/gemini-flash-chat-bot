@@ -87,7 +87,7 @@ def main():
             uploaded_files = st.file_uploader("Choose your pdf file", type=['pdf'], accept_multiple_files=False)
             if uploaded_files:
                 file_name=uploaded_files.name
-                file_upload = client.files.upload(file=file_name)
+                file_upload = client.upload_file(file=file_name)
                 chat2 = client.chats.create(model=MODEL_ID,
                     history=[
                         types.Content(
