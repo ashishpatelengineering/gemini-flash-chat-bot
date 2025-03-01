@@ -84,6 +84,12 @@ def main():
         if clear not in st.session_state:
             uploaded_files = st.file_uploader("Choose your pdf file", type=['pdf'], accept_multiple_files=False)
             if uploaded_files:
+                
+                # Save the uploaded file to a temporary location
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+                    tmp_file.write(uploaded_files.getvalue())
+                    file_name = tmp_file.name
+                
                 file_name=uploaded_files.name
                 file_upload = client.files.upload(file=file_name)
                 chat2 = client.chats.create(model=MODEL_ID,
