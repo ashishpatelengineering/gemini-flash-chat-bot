@@ -6,9 +6,7 @@ from google.genai import types
 from pypdf import PdfReader, PdfWriter, PdfMerger
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
-
 
 def setup_page():
     st.set_page_config(
