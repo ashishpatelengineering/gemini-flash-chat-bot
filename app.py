@@ -12,11 +12,11 @@ load_dotenv()
 
 def setup_page():
     st.set_page_config(
-        page_title= "Multimodal Chatbot",
+        page_title= "AI-Powered Chatbot",
         layout="centered"
     )
     
-    st.header("Multimodal Chatbot", anchor=False, divider="blue")
+    st.header("AI-Powered Chatbot", anchor=False, divider="blue")
 
     st.sidebar.header("Options", divider='rainbow')
     
