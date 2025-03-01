@@ -5,3 +5,4 @@ pypdf
 pymupdf
 Pillow
 python-dotenv
+tempfile
