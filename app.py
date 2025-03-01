@@ -29,7 +29,7 @@ def setup_page():
 
     
 def get_choice():
-    choice = st.sidebar.radio("Choose:", ["Chat",
+    choice = st.sidebar.radio("Choose:", ["Chat with AI",
                                           "Chat with a PDF",
                                           "Chat with many PDFs",
                                           "Chat with an image",
@@ -46,8 +46,8 @@ def get_clear():
 def main():
     choice = get_choice()
     
-    if choice == "Chat":
-        st.subheader("Chat")
+    if choice == "Chat with AI":
+        st.subheader("Chat with AI")
         clear = get_clear()
         if clear:
             if 'message' in st.session_state:
