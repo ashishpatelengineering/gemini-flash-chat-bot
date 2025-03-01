@@ -64,7 +64,7 @@ def main():
         if clear not in st.session_state:
             # Initialize the chat session with the model
             chat = client.chats.create(model=MODEL_ID, config=types.GenerateContentConfig(
-                system_instruction="You are a helpful assistant. Your answers need to be brief and concise.",))
+                system_instruction="You are a helpful assistant. Your answers need to be friendly and positive.",))
             prompt = st.chat_input("Enter your question here")
             if prompt:
                 with st.chat_message("user"):
