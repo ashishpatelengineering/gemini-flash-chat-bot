@@ -8,27 +8,29 @@ from google.genai import types
 from pypdf import PdfReader, PdfWriter, PdfMerger
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
 
 def setup_page():
+    """
+    Set up the Streamlit page configuration, including the title, layout, and sidebar.
+    """
     st.set_page_config(
-        page_title="🤖 Multi-Modal Chatbot",
+        page_title="Multi-Modal Chatbot",
         layout="centered"
     )
     
-    st.header("🤖 Multi-Modal Chatbot")
+    # Main header for the application
+    st.header("Multi-Modal Chatbot",divider='blue')
 
+    # Sidebar header with a divider
     st.sidebar.header("Options", divider='rainbow')
-    
-    hide_menu_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            </style>
-            """
-    st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 def get_choice():
-    choice = st.sidebar.radio("Choose:", ["Chat with Text",
+    """
+    Display a radio button in the sidebar for the user to choose the chat mode.
+    """
+    choice = st.sidebar.radio("Choose:", ["Chat with Assistant",
                                           "Chat with a PDF",
                                           "Chat with Multiple PDFs",
                                           "Chat with an Image",
@@ -37,14 +39,20 @@ def get_choice():
     return choice
 
 def get_clear():
+    """
+    Add a button in the sidebar to allow the user to start a new session.
+    """
     clear_button = st.sidebar.button("Start new session", key="clear")
     return clear_button
 
 def main():
+    """
+    Main function to handle the logic based on the user's choice of chat mode.
+    """
     choice = get_choice()
     
-    if choice == "Chat with Text":
-        st.subheader("Chat with Text")
+    if choice == "Chat with Assistant":
+        st.subheader("Chat with Assistant")
         clear = get_clear()
         if clear:
             if 'message' in st.session_state:
@@ -54,6 +62,7 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
+            # Initialize the chat session with the model
             chat = client.chats.create(model=MODEL_ID, config=types.GenerateContentConfig(
                 system_instruction="You are a helpful assistant. Your answers need to be brief and concise.",))
             prompt = st.chat_input("Enter your question here")
@@ -63,7 +72,7 @@ def main():
         
                 st.session_state.message += prompt
                 with st.chat_message(
-                    "assistant", avatar="🤖",
+                    "assistant", avatar="🔵",  
                 ):
                     response = chat.send_message(st.session_state.message)
                     st.markdown(response.text) 
@@ -81,6 +90,7 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
+            # Allow the user to upload a PDF file
             uploaded_file = st.file_uploader("Upload a PDF file", type=['pdf'], accept_multiple_files=False)
             if uploaded_file:
                 # Save the uploaded file to a temporary location
@@ -88,6 +98,7 @@ def main():
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
                 
+                # Upload the file to the API
                 file_upload = client.files.upload(file=tmp_file_path)
                 chat2 = client.chats.create(model=MODEL_ID,
                     history=[
@@ -108,7 +119,7 @@ def main():
             
                     st.session_state.message += prompt2
                     with st.chat_message(
-                        "assistant", avatar="🤖",
+                        "assistant", avatar="🔵",  
                     ):
                         response2 = chat2.send_message(st.session_state.message)
                         st.markdown(response2.text)
@@ -126,8 +137,10 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
+            # Allow the user to upload multiple PDF files
             uploaded_files = st.file_uploader("Upload one or more PDF files", type=['pdf'], accept_multiple_files=True)
             if uploaded_files:
+                # Merge all uploaded PDFs into a single file
                 merger = PdfMerger()
                 for file in uploaded_files:
                     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
@@ -139,6 +152,7 @@ def main():
                 merger.write(fullfile)
                 merger.close()
 
+                # Upload the merged file to the API
                 file_upload = client.files.upload(file=fullfile) 
                 chat2b = client.chats.create(model=MODEL_ID,
                     history=[
@@ -159,7 +173,7 @@ def main():
             
                     st.session_state.message += prompt2b
                     with st.chat_message(
-                        "assistant", avatar="🤖",
+                        "assistant", avatar="🔵",  
                     ):
                         response2b = chat2b.send_message(st.session_state.message)
                         st.markdown(response2b.text)
@@ -177,15 +191,18 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
+            # Allow the user to upload an image
             uploaded_file = st.file_uploader("Upload an image (PNG or JPEG)", type=['png','jpg'], accept_multiple_files=False)
             if uploaded_file:
                 # Display the uploaded image
                 st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
                 
+                # Save the uploaded file to a temporary location
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp_file:
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
                 
+                # Upload the file to the API
                 file_upload = client.files.upload(file=tmp_file_path)
                 chat3 = client.chats.create(model=MODEL_ID,
                     history=[
@@ -206,7 +223,7 @@ def main():
             
                     st.session_state.message += prompt3
                     with st.chat_message(
-                        "assistant", avatar="🤖",
+                        "assistant", avatar="🔵",  
                     ):
                         response3 = chat3.send_message(st.session_state.message)
                         st.markdown(response3.text)
@@ -223,15 +240,18 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
+            # Allow the user to upload an audio file
             uploaded_file = st.file_uploader("Upload an audio file (MP3 or WAV)", type=['mp3','wav'], accept_multiple_files=False)
             if uploaded_file:
                 # Display the uploaded audio file
                 st.audio(uploaded_file, format="audio/wav")
                 
+                # Save the uploaded file to a temporary location
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_file:
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
                 
+                # Upload the file to the API
                 file_upload = client.files.upload(file=tmp_file_path)
                 chat4 = client.chats.create(model=MODEL_ID,
                     history=[
@@ -252,7 +272,7 @@ def main():
             
                     st.session_state.message += prompt5
                     with st.chat_message(
-                        "assistant", avatar="🤖",
+                        "assistant", avatar="🔵",  
                     ):
                         response4 = chat4.send_message(st.session_state.message)
                         st.markdown(response4.text)
@@ -269,15 +289,18 @@ def main():
             st.session_state.message = " "
         
         if clear not in st.session_state:
+            # Allow the user to upload a video file
             uploaded_file = st.file_uploader("Upload a video file (MP4 or MOV)", type=['mp4','mov'], accept_multiple_files=False)
             if uploaded_file:
                 # Display the uploaded video file
                 st.video(uploaded_file, format="video/mp4")
                 
+                # Save the uploaded file to a temporary location
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
                     tmp_file.write(uploaded_file.getvalue())
                     tmp_file_path = tmp_file.name
                 
+                # Upload the file to the API
                 video_file = client.files.upload(file=tmp_file_path)
                 while video_file.state == "PROCESSING":
                     time.sleep(10)
@@ -305,7 +328,7 @@ def main():
             
                     st.session_state.message += prompt4
                     with st.chat_message(
-                        "assistant", avatar="🤖",
+                        "assistant", avatar="🔵",
                     ):
                         response5 = chat5.send_message(st.session_state.message)
                         st.markdown(response5.text)
