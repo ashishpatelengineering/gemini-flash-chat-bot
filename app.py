@@ -302,5 +302,5 @@ if __name__ == '__main__':
     setup_page()
     GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
     client = genai.Client(api_key=GOOGLE_API_KEY )
-    MODEL_ID = "gemini-1.5-flash"
+    MODEL_ID = "gemini-2.0-flash"
     main()
